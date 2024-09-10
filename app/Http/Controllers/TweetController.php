@@ -46,7 +46,9 @@ class TweetController extends Controller
      */
     public function show(Tweet $tweet)
     {
-        //
+        //詳細画面の表示処理
+        //dd($tweet);
+        return view('tweets.show', compact('tweet'));
     }
 
     /**
@@ -54,7 +56,8 @@ class TweetController extends Controller
      */
     public function edit(Tweet $tweet)
     {
-        //
+        //編集ボタンを押された時の処理
+        return view('tweets.edit', compact('tweet'));
     }
 
     /**
@@ -62,7 +65,15 @@ class TweetController extends Controller
      */
     public function update(Request $request, Tweet $tweet)
     {
-        //
+        //編集→更新する際の処理
+        //dd($request->all(), $tweet);
+        $request->validate([
+         'tweet' => 'required|max:255',
+        ]);
+
+        $tweet->update($request->only('tweet'));
+
+        return redirect()->route('tweets.show', $tweet);
     }
 
     /**
@@ -70,6 +81,11 @@ class TweetController extends Controller
      */
     public function destroy(Tweet $tweet)
     {
-        //
+        //ツイートの削除
+        {
+           $tweet->delete();
+
+           return redirect()->route('tweets.index');
+        }
     }
 }
