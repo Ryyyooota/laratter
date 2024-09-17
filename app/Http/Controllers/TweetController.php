@@ -48,6 +48,7 @@ class TweetController extends Controller
     {
         //詳細画面の表示処理
         //dd($tweet);
+        $tweet->load('comments');
         return view('tweets.show', compact('tweet'));
     }
 

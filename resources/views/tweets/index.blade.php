@@ -28,6 +28,9 @@
               </form>
               @endif
             </div>
+            <div class="mt-4">
+              <p class="text-gray-600 dark:text-gray-400 ml-4">comment {{ $tweet->comments->count() }}</p>
+            </div>
           </div>
           @endforeach
         </div>
