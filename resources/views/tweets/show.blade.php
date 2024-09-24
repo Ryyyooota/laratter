@@ -41,7 +41,7 @@
             @endif
           </div>
           <div class="mt-4">
-            <p class="text-gray-600 dark:text-gray-400 ml-4">comment {{ $tweet->comments->count() }}</p>
+            <p class="text-gray-600 dark:text-gray-400 ">comment {{ $tweet->comments->count() }}</p>
             <a href="{{ route('tweets.comments.create', $tweet) }}" class="text-blue-500 hover:text-blue-700 mr-2">コメントする</a>
           </div>
           <div class="mt-4">
