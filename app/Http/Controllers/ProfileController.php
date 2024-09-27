@@ -68,25 +68,28 @@ class ProfileController extends Controller
      * Display the specified resource.
      */
     public function show(User $user)
-    {
-      if (auth()->user()->is($user)) {
-        $tweets = Tweet::query()
-          ->where('user_id', $user->id)  // 自分のツイート
-          ->orWhereIn('user_id', $user->follows->pluck('id')) // フォローしているユーザーのツイート
-          ->latest()
-          ->paginate(10);
-        } 
-      else {
-      // 他のユーザーの場合、そのユーザーのツイートのみを取得
-        $tweets = $user
-          ->tweets()
-          ->latest()
-          ->paginate(10);
+{
+    // 認証ユーザーが自分自身の場合
+    if (auth()->user()->is($user)) {
+        // 自分のツイート
+        $myTweets = Tweet::where('user_id', $user->id)
+            ->latest()
+            ->paginate(10, ['*'], 'myTweetsPage');
+
+        // フォローしているユーザーのツイート
+        $followerTweets = Tweet::whereIn('user_id', $user->follows->pluck('id'))
+            ->latest()
+            ->paginate(10, ['*'], 'followerTweetsPage');
+    } else {
+        // 他のユーザーの場合、そのユーザーのツイートのみを取得
+        $myTweets = $user->tweets()->latest()->paginate(10, ['*'], 'myTweetsPage');
+        $followerTweets = collect(); // フォロワーのツイートは取得しない
     }
 
     // ユーザーのフォロワーとフォローしているユーザーを取得
     $user->load(['follows', 'followers']);
 
-    return view('profile.show', compact('user', 'tweets'));
-  }
+    return view('profile.show', compact('user', 'myTweets', 'followerTweets'));
+}
+
 }
