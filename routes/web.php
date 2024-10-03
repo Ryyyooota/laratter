@@ -29,6 +29,12 @@ Route::middleware('auth')->group(function () {
     Route::post('/tweets/{tweet}/like', [TweetLikeController::class, 'store'])->name('tweets.like');
     Route::delete('/tweets/{tweet}/like', [TweetLikeController::class, 'destroy'])->name('tweets.dislike');
     Route::resource('tweets.comments', CommentController::class);
+    //フォロワー一覧用のルート
+    Route::get('/profile/{user}/followers', [ProfileController::class, 'showFollowers'])->name('profile.followers');
+    //フォロー中user一覧のルート
+    Route::get('/profile/{user}/following', [ProfileController::class, 'showFollowing'])->name('profile.following');
+
+    
 });
 
 require __DIR__.'/auth.php';
